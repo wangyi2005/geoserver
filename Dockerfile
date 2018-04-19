@@ -1,13 +1,5 @@
 FROM anapsix/alpine-java:8u172b11_server-jre
 
-RUN apk add --no-cache curl  && \
-    cd /tmp && \
-    curl -L http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz | tar xfz - && \
-    curl -L http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz  | tar xfz - && \
-    mv /tmp/jai*/lib/*.jar $JAVA_HOME/jre/lib/ext/ && \
-    mv /tmp/jai*/lib/*.so $JAVA_HOME/jre/lib/amd64/ && \
-    rm -r /tmp/*
-
 ENV TOMCAT_MAJOR=8 \
     TOMCAT_VERSION=8.5.3 \
     TOMCAT_HOME=/opt/tomcat \
@@ -28,7 +20,8 @@ COPY logging.properties ${TOMCAT_HOME}/conf/logging.properties
 COPY server.xml ${TOMCAT_HOME}/conf/server.xml
 
 # Install Java JAI libraries
-RUN cd /tmp && \
+RUN \
+    cd /tmp && \
     curl -L http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz | tar xfz - && \
     curl -L http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz  | tar xfz - && \
     mv /tmp/jai*/lib/*.jar $JAVA_HOME/lib/ext/ && \
