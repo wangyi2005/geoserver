@@ -1,7 +1,7 @@
 FROM anapsix/alpine-java:8u172b11_server-jre
 
 ENV TOMCAT_MAJOR=8 \
-    TOMCAT_VERSION=8.5.3 \
+    TOMCAT_VERSION=8.5.30 \
     TOMCAT_HOME=/opt/tomcat \
     CATALINA_HOME=/opt/tomcat \
     CATALINA_OUT=/dev/null
@@ -29,7 +29,7 @@ RUN \
 
 # Install geoserver
 ENV GS_VERSION 2.13
-RUN wget -c http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip -O /tmp/geoserver.zip && \
+RUN wget http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip -O /tmp/geoserver.zip && \
     unzip /tmp/geoserver.zip && \
     rm -rf ${CATALINA_HOME}/webapps/* && \
     unzip /tmp/geoserver.war -d $CATALINA_HOME/webapps/ROOT && \
