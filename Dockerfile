@@ -31,7 +31,7 @@ RUN \
 ENV GS_VERSION 2.13.0
 RUN mkdir -p /tmp/resources && \
     mkdir -p /tmp/geoserver && \
-    mkdir -p $CATALINA_HOME/webapps/geoserver && \
+    mkdir -m 777 $CATALINA_HOME/webapps/geoserver && \
     curl -L http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip > /tmp/resources/geoserver.zip && \
     unzip /tmp/resources/geoserver.zip -d /tmp/geoserver && \
     rm -rf ${CATALINA_HOME}/webapps/* && \
