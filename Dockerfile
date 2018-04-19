@@ -28,7 +28,7 @@ ENV GEOSERVER_HOME /geoserver/geoserver-${GS_VERSION}
 
 RUN mkdir -m 777 /geoserver && \
     cd /geoserver && \
-    wget https://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-bin.zip -O geoserver.zip && \
+    wget http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-bin.zip -O geoserver.zip && \
     unzip geoserver.zip && \ 
     rm -rf geoserver.zip && \
     chmod 777 /geoserver/geoserver-${GS_VERSION}/data_dir
