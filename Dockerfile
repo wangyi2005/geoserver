@@ -1,7 +1,6 @@
 FROM alpine:3.7
 
 #---------------openjdk JRE8-----------------------------------------------
-
 ENV LANG C.UTF-8
 ENV JAVA_VERSION 8u151
 ENV JAVA_ALPINE_VERSION 8.151.12-r0
