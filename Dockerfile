@@ -28,18 +28,13 @@ RUN \
     rm -r /tmp/*
 
 # Install geoserver
-ENV GS_VERSION 2.13
-RUN wget http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip -O /tmp/geoserver.zip && \
+ENV GS_VERSION 2.13.0
+RUN curl -L http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip > /tmp/geoserver.zip && \
     unzip /tmp/geoserver.zip && \
     rm -rf ${CATALINA_HOME}/webapps/* && \
     unzip /tmp/geoserver.war -d $CATALINA_HOME/webapps/ROOT && \
     (cd $CATALINA_HOME/webapps/ROOT/WEB-INF/lib; rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar) && \
     rm -r /tmp/*
-
-# Install plugins (WPS)
-RUN curl -L http://ares.boundlessgeo.com/geoserver/${GEOSERVER_VERSION_NAME}/ext-latest/geoserver-${GEOSERVER_VERSION}-SNAPSHOT-wps-plugin.zip > /tmp/geoserver-wps-plugin.zip && \
-    unzip /tmp/geoserver-wps-plugin.zip -d $CATALINA_HOME/webapps/ROOT/WEB-INF/lib/ && \
-    rm /tmp/*
 
 # Install Marlin
 RUN cd /usr/local/tomcat/lib && wget https://github.com/bourgesl/marlin-renderer/releases/download/v0.7.4_2/marlin-0.7.4-Unsafe.jar && \
