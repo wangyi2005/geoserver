@@ -19,9 +19,17 @@ RUN set -x \
 	&& apk add --no-cache \
 		openjdk8-jre="$JAVA_ALPINE_VERSION" \
 	&& [ "$JAVA_HOME" = "$(docker-java-home)" ]
+	
+RUN cd /tmp && \
+    wget http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz | tar xfz - && \
+    wget http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz  | tar xfz - && \
+    mv /tmp/jai*/lib/*.jar $JAVA_HOME/lib/ext/ && \
+    mv /tmp/jai*/lib/*.so $JAVA_HOME/lib/amd64/ && \
+    rm -r /tmp/*
+    
     
 #----------------tomcat 9------------------------
-ENV CATALINA_HOME /usr/local/tomcat
+ENV CATALINA_HOME /tomcat
 ENV PATH $CATALINA_HOME/bin:$PATH
 RUN mkdir -m 777 "$CATALINA_HOME"
 WORKDIR $CATALINA_HOME
@@ -147,22 +155,19 @@ RUN set -e \
 	fi
 #-------------------------Geoserver 2.13-------------------------------
 ARG GS_VERSION=2.13.0
-ENV GEOSERVER /opt/geoserver
-ENV GEOSERVER_DATA_DIR /opt/geoserver/data_dir
+ENV GEOSERVER /geoserver
+ENV GEOSERVER_DATA_DIR /geoserver/data_dir
 ENV ENABLE_JSONP true
 ENV MAX_FILTER_RULES 20
 ENV OPTIMIZE_LINE_WIDTH false
-#ENV GEOWEBCACHE_CACHE_DIR /opt/geoserver/data_dir/gwc
-
-
 ENV GEOSERVER_OPTS "-Djava.awt.headless=true -server -Xms2G -Xmx4G -Xrs -XX:PerfDataSamplingInterval=500 \
  -Dorg.geotools.referencing.forceXY=true -XX:SoftRefLRUPolicyMSPerMB=36000 -XX:+UseParallelGC -XX:NewRatio=2 \
  -XX:+CMSClassUnloadingEnabled"
-#-XX:+UseConcMarkSweepGC use this rather than parallel GC?  
+
 ENV JAVA_OPTS "$JAVA_OPTS $GEOSERVER_OPTS"
 ENV GDAL_DATA /usr/local/gdal_data
 ENV LD_LIBRARY_PATH /usr/local/gdal_native_libs:/usr/local/apr/lib:/opt/libjpeg-turbo/lib64
-ENV GEOSERVER_LOG_LOCATION /opt/geoserver/data_dir/logs/geoserver.log
+ENV GEOSERVER_LOG_LOCATION /geoserver/data_dir/logs/geoserver.log
 
 RUN mkdir -m 777 $GEOSERVER
 RUN mkdir -m 777 $GEOSERVER_DATA_DIR
@@ -170,27 +175,6 @@ RUN mkdir -m 777 $GEOSERVER_DATA_DIR
 ADD logs $GEOSERVER_DATA_DIR/logs
 ADD resources /tmp/resources
 
-WORKDIR /tmp
-# A little logic that will fetch the JAI and JAI ImageIO tar file if it
-# is not available locally in the resources dir
-RUN if [ ! -f /tmp/resources/jai-1_1_3-lib-linux-amd64.tar.gz ]; then \
-    wget http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz -P ./resources;\
-    fi; \
-    if [ ! -f /tmp/resources/jai_imageio-1_1-lib-linux-amd64.tar.gz ]; then \
-    wget http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz -P ./resources;\
-    fi; \
-    mv resources/jai-1_1_3-lib-linux-amd64.tar.gz ./ && \
-    mv resources/jai_imageio-1_1-lib-linux-amd64.tar.gz ./ && \
-    gunzip -c jai-1_1_3-lib-linux-amd64.tar.gz | tar xf - && \
-    gunzip -c jai_imageio-1_1-lib-linux-amd64.tar.gz | tar xf - && \
-    mv /tmp/jai-1_1_3/lib/*.jar $JAVA_HOME/jre/lib/ext/ && \
-    mv /tmp/jai-1_1_3/lib/*.so $JAVA_HOME/jre/lib/amd64/ && \
-    mv /tmp/jai_imageio-1_1/lib/*.jar $JAVA_HOME/jre/lib/ext/ && \
-    mv /tmp/jai_imageio-1_1/lib/*.so $JAVA_HOME/jre/lib/amd64/ && \
-    rm /tmp/jai-1_1_3-lib-linux-amd64.tar.gz && \
-    rm -r /tmp/jai-1_1_3 && \
-    rm /tmp/jai_imageio-1_1-lib-linux-amd64.tar.gz && \
-    rm -r /tmp/jai_imageio-1_1
 WORKDIR $CATALINA_HOME
 RUN if [ ! -f /tmp/resources/geoserver-${GS_VERSION}.zip ]; then \
     wget -c http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip \
@@ -223,7 +207,7 @@ RUN rm -f /tmp/resources/overlays/README.txt && \
     fi;
 
 # Optionally remove Tomcat manager, docs, and examples
-ARG TOMCAT_EXTRAS=true
+ARG TOMCAT_EXTRAS=false
 RUN if [ "$TOMCAT_EXTRAS" = false ]; then \
     rm -rf $CATALINA_HOME/webapps/ROOT && \
     rm -rf $CATALINA_HOME/webapps/docs && \
