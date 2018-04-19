@@ -20,13 +20,27 @@ RUN set -x \
 		openjdk8-jre="$JAVA_ALPINE_VERSION" \
 	&& [ "$JAVA_HOME" = "$(docker-java-home)" ]
 	
-RUN cd /tmp && \
-    wget http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz | tar xfz - && \
-    wget http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz  | tar xfz - && \
-    mv /tmp/jai*/lib/*.jar $JAVA_HOME/lib/ext/ && \
-    mv /tmp/jai*/lib/*.so $JAVA_HOME/lib/amd64/ && \
-    rm -r /tmp/*
-    
+#Add JAI and ImageIO for great speedy speed.
+WORKDIR /tmp
+RUN if [ ! -f /tmp/resources/jai-1_1_3-lib-linux-amd64.tar.gz ]; then \
+    wget http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz -P ./resources;\
+    fi; \
+    if [ ! -f /tmp/resources/jai_imageio-1_1-lib-linux-amd64.tar.gz ]; then \
+    wget http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz -P ./resources;\
+    fi; \
+    mv resources/jai-1_1_3-lib-linux-amd64.tar.gz ./ && \
+    mv resources/jai_imageio-1_1-lib-linux-amd64.tar.gz ./ && \
+    gunzip -c jai-1_1_3-lib-linux-amd64.tar.gz | tar xf - && \
+    gunzip -c jai_imageio-1_1-lib-linux-amd64.tar.gz | tar xf - && \
+    mv /tmp/jai-1_1_3/lib/*.jar $JAVA_HOME/jre/lib/ext/ && \
+    mv /tmp/jai-1_1_3/lib/*.so $JAVA_HOME/jre/lib/amd64/ && \
+    mv /tmp/jai_imageio-1_1/lib/*.jar $JAVA_HOME/jre/lib/ext/ && \
+    mv /tmp/jai_imageio-1_1/lib/*.so $JAVA_HOME/jre/lib/amd64/ && \
+    rm /tmp/jai-1_1_3-lib-linux-amd64.tar.gz && \
+    rm -r /tmp/jai-1_1_3 && \
+    rm /tmp/jai_imageio-1_1-lib-linux-amd64.tar.gz && \
+    rm -r /tmp/jai_imageio-1_1
+   
     
 #----------------tomcat 9------------------------
 ENV CATALINA_HOME /tomcat
