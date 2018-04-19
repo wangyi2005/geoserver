@@ -10,7 +10,7 @@ ENV PATH $PATH:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openj
 ENV JAVA_VERSION 8u151
 ENV JAVA_ALPINE_VERSION 8.151.12-r0
 
-RUN apk add --no-cache openjdk8-jre="$JAVA_ALPINE_VERSION"
+RUN apk add --no-cache curl openjdk8-jre="$JAVA_ALPINE_VERSION"
 
 #RUN apk add --no-cache curl openjdk8-jre="$JAVA_ALPINE_VERSION" && \
 #    cd /tmp && \
@@ -27,10 +27,11 @@ ENV GEOSERVER_HOME /geoserver/geoserver-${GS_VERSION}
 
 RUN mkdir -m 777 /geoserver && \
     cd /geoserver && \
-    wget -O geoserver.zip http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-bin.zip && \
-    unzip geoserver.zip && \ 
-    rm -rf geoserver.zip && \
-    chmod 777 /geoserver/geoserver-${GS_VERSION}/data_dir
+    curl -L http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-bin.zip && \
+    unzip geoserver-${GS_VERSION}-bin.zip && \ 
+    rm -rf geoserver-${GS_VERSION}-bin.zip && \
+    chmod 777 /geoserver/geoserver-${GS_VERSION}/data_dir && \
+    chmod 777 /geoserver/geoserver-${GS_VERSION}/logs
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh 
