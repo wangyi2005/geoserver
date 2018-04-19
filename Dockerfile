@@ -1,27 +1,61 @@
 FROM anapsix/alpine-java:8u172b11_server-jre
 
-#RUN apk add --no-cache curl  && \
-#    cd /tmp && \
-#    curl -L http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz | tar xfz - && \
-#    curl -L http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz  | tar xfz - && \
-#    mv /tmp/jai*/lib/*.jar $JAVA_HOME/jre/lib/ext/ && \
-#    mv /tmp/jai*/lib/*.so $JAVA_HOME/jre/lib/amd64/ && \
-#    rm -r /tmp/*
-   
+RUN apk add --no-cache curl  && \
+    cd /tmp && \
+    curl -L http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz | tar xfz - && \
+    curl -L http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz  | tar xfz - && \
+    mv /tmp/jai*/lib/*.jar $JAVA_HOME/jre/lib/ext/ && \
+    mv /tmp/jai*/lib/*.so $JAVA_HOME/jre/lib/amd64/ && \
+    rm -r /tmp/*
 
-#-------------------------Geoserver 2.13-------------------------------
-ENV GS_VERSION 2.13.0
-ENV GEOSERVER_HOME /geoserver/geoserver-${GS_VERSION}
+ENV TOMCAT_MAJOR=8 \
+    TOMCAT_VERSION=8.5.3 \
+    TOMCAT_HOME=/opt/tomcat \
+    CATALINA_HOME=/opt/tomcat \
+    CATALINA_OUT=/dev/null
 
-RUN mkdir -m 777 /geoserver && \
-    cd /geoserver && \
-    wget http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-bin.zip && \
-    unzip geoserver-${GS_VERSION}-bin.zip && \ 
-    rm -rf geoserver-${GS_VERSION}-bin.zip && \
-    chmod 777 /geoserver/geoserver-${GS_VERSION}/data_dir && \
-    chmod 777 /geoserver/geoserver-${GS_VERSION}/logs
+RUN apk upgrade --update && \
+    apk add --update curl && \
+    curl -jksSL -o /tmp/apache-tomcat.tar.gz http://archive.apache.org/dist/tomcat/tomcat-${TOMCAT_MAJOR}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz && \
+    gunzip /tmp/apache-tomcat.tar.gz && \
+    tar -C /opt -xf /tmp/apache-tomcat.tar && \
+    ln -s /opt/apache-tomcat-${TOMCAT_VERSION} ${TOMCAT_HOME} && \
+    rm -rf ${TOMCAT_HOME}/webapps/* && \
+    apk del curl && \
+    rm -rf /tmp/* /var/cache/apk/*
 
-ADD entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh 
-CMD /entrypoint.sh
+COPY logging.properties ${TOMCAT_HOME}/conf/logging.properties
+COPY server.xml ${TOMCAT_HOME}/conf/server.xml
+
+E# Install Java JAI libraries
+RUN cd /tmp && \
+    curl -L http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz | tar xfz - && \
+    curl -L http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz  | tar xfz - && \
+    mv /tmp/jai*/lib/*.jar $JAVA_HOME/lib/ext/ && \
+    mv /tmp/jai*/lib/*.so $JAVA_HOME/lib/amd64/ && \
+    rm -r /tmp/*
+
+ENV GEOSERVER_VERSION 2.13
+ENV GEOSERVER_VERSION_NAME master
+
+
+# Install geoserver
+RUN curl -L http://ares.boundlessgeo.com/geoserver/${GEOSERVER_VERSION_NAME}/geoserver-${GEOSERVER_VERSION_NAME}-latest-war.zip > /tmp/geoserver.zip && \
+    unzip /tmp/geoserver.zip -d /tmp/geoserver && \
+    rm -rf ${CATALINA_HOME}/webapps/* && \
+    unzip /tmp/geoserver/geoserver.war -d $CATALINA_HOME/webapps/ROOT && \
+    (cd $CATALINA_HOME/webapps/ROOT/WEB-INF/lib; rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar) && \
+    rm -r /tmp/*
+
+# Install plugins (WPS)
+RUN curl -L http://ares.boundlessgeo.com/geoserver/${GEOSERVER_VERSION_NAME}/ext-latest/geoserver-${GEOSERVER_VERSION}-SNAPSHOT-wps-plugin.zip > /tmp/geoserver-wps-plugin.zip && \
+    unzip /tmp/geoserver-wps-plugin.zip -d $CATALINA_HOME/webapps/ROOT/WEB-INF/lib/ && \
+    rm /tmp/*
+
+# Install Marlin
+RUN cd /usr/local/tomcat/lib && wget https://github.com/bourgesl/marlin-renderer/releases/download/v0.7.4_2/marlin-0.7.4-Unsafe.jar && \
+    wget https://github.com/bourgesl/marlin-renderer/releases/download/v0.7.4_2/marlin-0.7.4-Unsafe-sun-java2d.jar
+
+ENV CATALINA_OPTS "-Xbootclasspath/a:/usr/local/tomcat/lib/marlin-0.7.4-Unsafe.jar -Xbootclasspath/p:/usr/local/tomcat/lib/marlin-0.7.4-Unsafe-sun-java2d.jar -Dsun.java2d.renderer=org.marlin.pisces.PiscesRenderingEngine" 
+VOLUME ["/logs"]
 EXPOSE 8080
