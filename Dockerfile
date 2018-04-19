@@ -27,15 +27,15 @@ RUN \
     mv /tmp/jai*/lib/*.so $JAVA_HOME/jre/lib/amd64/ && \
     rm -r /tmp/*
 
-ENV GEOSERVER_VERSION 2.13
+ENV GS_VERSION 2.13
 ENV GEOSERVER_VERSION_NAME master
 
 
 # Install geoserver
-RUN curl -L http://ares.boundlessgeo.com/geoserver/${GEOSERVER_VERSION_NAME}/geoserver-${GEOSERVER_VERSION_NAME}-latest-war.zip > /tmp/geoserver.zip && \
-    unzip /tmp/geoserver.zip -d /tmp/geoserver && \
+RUN wget -c http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip -O /tmp/geoserver.zip
+    unzip /tmp/geoserver.zip && \
     rm -rf ${CATALINA_HOME}/webapps/* && \
-    unzip /tmp/geoserver/geoserver.war -d $CATALINA_HOME/webapps/ROOT && \
+    unzip /tmp/geoserver.war -d $CATALINA_HOME/webapps/ROOT && \
     (cd $CATALINA_HOME/webapps/ROOT/WEB-INF/lib; rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar) && \
     rm -r /tmp/*
 
