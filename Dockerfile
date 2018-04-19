@@ -22,8 +22,8 @@ RUN set -x \
 	
 #Add JAI and ImageIO for great speedy speed.
 WORKDIR /tmp
-RUN wget http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz -P ./ && \
-    wget http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz -P ./ && \
+RUN wget http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz && \
+    wget http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz  && \
     gunzip -c jai-1_1_3-lib-linux-amd64.tar.gz | tar xf - && \
     gunzip -c jai_imageio-1_1-lib-linux-amd64.tar.gz | tar xf - && \
     mv /tmp/jai-1_1_3/lib/*.jar $JAVA_HOME/jre/lib/ext/ && \
