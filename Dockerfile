@@ -147,7 +147,7 @@ RUN set -e \
 	fi
 #-------------------------Geoserver 2.13-------------------------------
 ARG GS_VERSION=2.13.0
-ENV GEOSERVER_DATAR /opt/geoserver
+ENV GEOSERVER /opt/geoserver
 ENV GEOSERVER_DATA_DIR /opt/geoserver/data_dir
 ENV ENABLE_JSONP true
 ENV MAX_FILTER_RULES 20
@@ -164,8 +164,8 @@ ENV GDAL_DATA /usr/local/gdal_data
 ENV LD_LIBRARY_PATH /usr/local/gdal_native_libs:/usr/local/apr/lib:/opt/libjpeg-turbo/lib64
 ENV GEOSERVER_LOG_LOCATION /opt/geoserver/data_dir/logs/geoserver.log
 
-RUN mkdir -m 777 $GEOSERVER_DATA && \
-    mkdir -p $GEOSERVER_DATA_DIR
+RUN mkdir -m 777 $GEOSERVER
+RUN mkdir -m 777 $GEOSERVER_DATA_DIR
 
 ADD logs $GEOSERVER_DATA_DIR/logs
 ADD resources /tmp/resources
