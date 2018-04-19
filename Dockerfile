@@ -34,7 +34,7 @@ RUN mkdir -p /tmp/resources && \
     curl -L http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip > /tmp/resources/geoserver.zip && \
     unzip /tmp/resources/geoserver.zip -d /tmp/geoserver && \
     rm -rf ${CATALINA_HOME}/webapps/* && \
-    unzip /tmp/geoserver/geoserver.war  $CATALINA_HOME/webapps/ROOT && \
+    unzip /tmp/geoserver/geoserver.war -d $CATALINA_HOME/webapps/ROOT && \
     (cd $CATALINA_HOME/webapps/ROOT/WEB-INF/lib; rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar) && \
     rm -r /tmp/*
 
