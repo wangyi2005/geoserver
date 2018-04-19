@@ -19,7 +19,7 @@ RUN apk add --no-cache curl openjdk8-jre="$JAVA_ALPINE_VERSION" && \
 
 #-------------------------Geoserver 2.13-------------------------------
 ARG GS_VERSION=2.13.0
-ENV GEOSERVER-HOME /geoserver/geoserver-GS_VERSION
+ENV GEOSERVER-HOME /geoserver/geoserver-${GS_VERSION}
 
 RUN mkdir -m 777 /geoserver && \
     cd /geoserver && \
