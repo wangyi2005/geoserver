@@ -27,12 +27,9 @@ RUN \
     mv /tmp/jai*/lib/*.so $JAVA_HOME/jre/lib/amd64/ && \
     rm -r /tmp/*
 
-ENV GS_VERSION 2.13
-ENV GEOSERVER_VERSION_NAME master
-
-
 # Install geoserver
-RUN wget -c http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip -O /tmp/geoserver.zip
+ENV GS_VERSION 2.13
+RUN wget -c http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip -O /tmp/geoserver.zip && \
     unzip /tmp/geoserver.zip && \
     rm -rf ${CATALINA_HOME}/webapps/* && \
     unzip /tmp/geoserver.war -d $CATALINA_HOME/webapps/ROOT && \
