@@ -30,7 +30,8 @@ RUN mkdir -m 777 /geoserver && \
     cd /geoserver && \
     wget https://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-bin.zip -O geoserver.zip && \
     unzip geoserver.zip && \ 
-    rm -rf geoserver.zip
+    rm -rf geoserver.zip && \
+    chmod 777 /geoserver/geoserver-${GS_VERSION}/data_dir
 
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh 
