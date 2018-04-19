@@ -29,7 +29,8 @@ RUN \
 
 # Install geoserver
 ENV GS_VERSION 2.13.0
-RUN curl -L http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip > /tmp/resources/geoserver.zip && \
+RUN mkdir -p /tmp/resources && \
+    curl -L http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip > /tmp/resources/geoserver.zip && \
     unzip /tmp/resources/geoserver.zip -d /tmp/geoserver && \
     rm -rf ${CATALINA_HOME}/webapps/* && \
     unzip /tmp/geoserver/geoserver.war  $CATALINA_HOME/webapps/ROOT && \
