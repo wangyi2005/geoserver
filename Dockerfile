@@ -29,10 +29,10 @@ RUN \
 
 # Install geoserver
 ENV GS_VERSION 2.13.0
-RUN curl -L http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip > /tmp/geoserver.zip && \
-    unzip /tmp/geoserver.zip && \
+RUN curl -L http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip > /tmp/resources/geoserver.zip && \
+    unzip /tmp/resources/geoserver.zip -d /tmp/geoserver && \
     rm -rf ${CATALINA_HOME}/webapps/* && \
-    mv /tmp/geoserver.war  $CATALINA_HOME/webapps/ROOT && \
+    unzip /tmp/geoserver/geoserver.war  $CATALINA_HOME/webapps/ROOT && \
     (cd $CATALINA_HOME/webapps/ROOT/WEB-INF/lib; rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar) && \
     rm -r /tmp/*
 
