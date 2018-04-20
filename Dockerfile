@@ -1,4 +1,4 @@
-FROM anapsix/alpine-java:8u172b11_server-jre
+FROM anapsix/alpine-java:8u172b11_server-jre_unlimited
 
 # Install Java JAI libraries
 RUN \
