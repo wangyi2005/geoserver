@@ -1,4 +1,5 @@
 #FROM anapsix/alpine-java:8u172b11_server-jre_unlimited
+
 FROM openjdk:8-jre-alpine
 
 # Install Java JAI libraries
