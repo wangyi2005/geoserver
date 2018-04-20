@@ -22,7 +22,7 @@ RUN \
     chgrp -R 0 /geoserver && \
     chmod -R g+rwX /geoserver && \
     cd /geoserver/webapps/geoserver/WEB-INF/lib && \
-    rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar) && \
+    rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar && \
     rm -r /tmp/*
 
 ADD entrypoint.sh /entrypoint.sh
