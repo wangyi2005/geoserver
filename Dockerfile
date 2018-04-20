@@ -22,9 +22,9 @@ RUN \
     chown -R 0 /geoserver && \
     #chgrp -R 0 /geoserver && \
     #chmod -R g+rwX /geoserver && \
-    cd /geoserver/webapps/geoserver/WEB-INF/lib && \
-    rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar && \
-    apk del curl && \
+    cd /geoserver/webapps/geoserver/WEB-INF/lib  && \
+    rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar  && \
+    apk del curl  && \
     rm -r /tmp/*
 
 ADD entrypoint.sh /entrypoint.sh
