@@ -1,2 +1,2 @@
-cd /geoserver/geoserver-${GS_VERSION}/bin
+cd /geoserver/bin
 ./startup.sh
