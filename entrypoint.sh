@@ -1,2 +1,2 @@
 cd /geoserver/bin
-./startup.sh
+sh startup.sh
