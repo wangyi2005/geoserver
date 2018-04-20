@@ -30,4 +30,7 @@ RUN \
     rm -rf $CATALINA_HOME/webapps/host-manager && \
     rm -rf $CATALINA_HOME/webapps/manager
     
+COPY logging.properties ${TOMCAT_HOME}/conf/logging.properties
+COPY server.xml ${TOMCAT_HOME}/conf/server.xml
+    
 
