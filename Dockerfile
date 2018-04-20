@@ -19,9 +19,8 @@ RUN \
     curl -L http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-bin.zip > geoserver.zip && \
     unzip geoserver.zip -d / && \
     mv /geoserver-${GS_VERSION} /geoserver && \
-    chown -R 0 /geoserver && \
-    #chgrp -R 0 /geoserver && \
-    #chmod -R g+rwX /geoserver && \
+    chgrp -R 0 /geoserver && \
+    chmod -R g+rwX /geoserver && \
     cd /geoserver/webapps/geoserver/WEB-INF/lib  && \
     rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar  && \
     apk del curl  && \
