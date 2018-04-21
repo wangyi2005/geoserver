@@ -1,6 +1,5 @@
 FROM tomcat:8.5.30-jre8-alpine
 
-ENV JAVA_OPTS "-server -Xms256m -Xmx768m -Djava.awt.headless=true"
 # Install Java JAI libraries
 RUN \
     apk add --no-cache ca-certificates curl && \
@@ -11,8 +10,12 @@ RUN \
     mv /tmp/jai*/lib/*.so $JAVA_HOME/lib/amd64/  && \
     rm -r /tmp/*
     
-# Install geoserver
+# Install Marlin
+RUN cd /usr/local/tomcat/lib && \
+    wget https://github.com/bourgesl/marlin-renderer/releases/download/v0_9_1/marlin-0.9.1-Unsafe.jar && \
+    wget https://github.com/bourgesl/marlin-renderer/releases/download/v0_9_1/marlin-0.9.1-Unsafe-sun-java2d.jar
 
+# Install geoserver
 ARG GS_VERSION=2.13.0
 RUN \
     mkdir -p $CATALINA_HOME/webapps/geoserver && \
@@ -32,5 +35,6 @@ RUN \
     rm -rf $CATALINA_HOME/webapps/manager
     
 COPY context.xml ${TOMCAT_HOME}/conf/context.xml
+ENV CATALINA_OPTS "-server -Xms256m -Xmx768m -Djava.awt.headless=true -Xbootclasspath/a:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe.jar -Xbootclasspath/p:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe-sun-java2d.jar -Dsun.java2d.renderer=org.marlin.pisces.PiscesRenderingEngine" 
     
 
