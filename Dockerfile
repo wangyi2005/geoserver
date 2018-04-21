@@ -1,4 +1,4 @@
-FROM tomcat:9-jre8-slim
+FROM tomcat:9-jre8-alpine
 
 # Install Java JAI libraries
 RUN \
