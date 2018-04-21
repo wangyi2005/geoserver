@@ -1,5 +1,6 @@
 FROM tomcat:8.5.30-jre8-alpine
 
+ENV JAVA_OPTS "-server -Xms256m -Xmx768m -Djava.awt.headless=true"
 # Install Java JAI libraries
 RUN \
     apk add --no-cache ca-certificates curl && \
@@ -12,7 +13,7 @@ RUN \
     
 # Install geoserver
 
-ENV GS_VERSION 2.13.0
+ARG GS_VERSION 2.13.0
 RUN \
     mkdir -p $CATALINA_HOME/webapps/geoserver && \
     curl -L http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip > /tmp/geoserver.zip && \
