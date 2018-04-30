@@ -15,7 +15,7 @@ RUN cd /usr/local/tomcat/lib && \
     wget https://github.com/bourgesl/marlin-renderer/releases/download/v0_9_1/marlin-0.9.1-Unsafe.jar && \
     wget https://github.com/bourgesl/marlin-renderer/releases/download/v0_9_1/marlin-0.9.1-Unsafe-sun-java2d.jar
 
-# Install geoserver
+# Install geoserver and plugins (importer)
 ARG GS_VERSION=2.13.0
 RUN \
     mkdir -p $CATALINA_HOME/webapps/geoserver && \
@@ -26,6 +26,8 @@ RUN \
     chmod -R g+rwX $CATALINA_HOME && \
     cd $CATALINA_HOME/webapps/geoserver/WEB-INF/lib  && \
     rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar  && \
+    curl -L http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-importer-plugin.zip > /tmp/geoserver-importer-plugin.zip && \
+    unzip /tmp/geoserver-importer-plugin.zip -d $CATALINA_HOME/webapps/geoserver/WEB-INF/lib/ && \
     apk del curl  && \
     rm -r /tmp/* && \
     rm -rf $CATALINA_HOME/webapps/ROOT && \
@@ -33,11 +35,6 @@ RUN \
     rm -rf $CATALINA_HOME/webapps/examples && \
     rm -rf $CATALINA_HOME/webapps/host-manager && \
     rm -rf $CATALINA_HOME/webapps/manager
-    
- # Install plugins (importer)
-RUN curl -L http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-importer-plugin.zip > /tmp/geoserver-importer-plugin.zip && \
-    unzip /tmp/geoserver-importer-plugin.zip -d $CATALINA_HOME/webapps/geoserver/WEB-INF/lib/ && \
-    rm /tmp/*
     
 COPY context.xml ${TOMCAT_HOME}/conf/context.xml
 ENV CATALINA_OPTS "-server -Xms128m -Xmx384m -Djava.awt.headless=true -Xbootclasspath/a:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe.jar -Xbootclasspath/p:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe-sun-java2d.jar -Dsun.java2d.renderer=org.marlin.pisces.PiscesRenderingEngine"
