@@ -34,7 +34,10 @@ RUN \
     rm -rf $CATALINA_HOME/webapps/host-manager && \
     rm -rf $CATALINA_HOME/webapps/manager
     
-COPY context.xml ${TOMCAT_HOME}/conf/context.xml
-ENV CATALINA_OPTS "-server -Xms256m -Xmx768m -Djava.awt.headless=true -Xbootclasspath/a:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe.jar -Xbootclasspath/p:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe-sun-java2d.jar -Dsun.java2d.renderer=org.marlin.pisces.PiscesRenderingEngine" 
+ # Install plugins (importer)
+RUN curl -L http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-importer-plugin.zip > /tmp/geoserver-importer-plugin.zip && \
+    unzip /tmp/geoserver-importer-plugin.zip -d $CATALINA_HOME/webapps/geoserver/WEB-INF/lib/ && \
+    rm /tmp/*
     
-
+COPY context.xml ${TOMCAT_HOME}/conf/context.xml
+ENV CATALINA_OPTS "-server -Xms128m -Xmx384m -Djava.awt.headless=true -Xbootclasspath/a:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe.jar -Xbootclasspath/p:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe-sun-java2d.jar -Dsun.java2d.renderer=org.marlin.pisces.PiscesRenderingEngine"
