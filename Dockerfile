@@ -27,7 +27,7 @@ RUN \
     cd $CATALINA_HOME/webapps/geoserver/WEB-INF/lib  && \
     rm jai_core-*jar jai_imageio-*.jar jai_codec-*.jar  && \
     curl -L http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-importer-plugin.zip > /tmp/geoserver-importer-plugin.zip && \
-    unzip /tmp/geoserver-importer-plugin.zip -d $CATALINA_HOME/webapps/geoserver/WEB-INF/lib/ && \
+    unzip -o /tmp/geoserver-importer-plugin.zip -d $CATALINA_HOME/webapps/geoserver/WEB-INF/lib/ && \
     apk del curl  && \
     rm -r /tmp/* && \
     rm -rf $CATALINA_HOME/webapps/ROOT && \
