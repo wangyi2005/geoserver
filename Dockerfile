@@ -36,4 +36,4 @@ RUN \
     rm -rf $CATALINA_HOME/webapps/manager
     
 COPY context.xml ${TOMCAT_HOME}/conf/context.xml
-ENV CATALINA_OPTS "-server -Xms256m -Xmx512m -Djava.awt.headless=true -Xbootclasspath/a:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe.jar -Xbootclasspath/p:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe-sun-java2d.jar -Dsun.java2d.renderer=org.marlin.pisces.PiscesRenderingEngine"
+ENV CATALINA_OPTS "-server -Xms256m -Xmx768m -Djava.awt.headless=true -Xbootclasspath/a:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe.jar -Xbootclasspath/p:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe-sun-java2d.jar -Dsun.java2d.renderer=org.marlin.pisces.PiscesRenderingEngine"
