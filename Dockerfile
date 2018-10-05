@@ -2,7 +2,7 @@ FROM tomcat:9-jre8-alpine
 
 # Install Java JAI libraries
 RUN \
-    apk add --no-cache ca-certificates curl && \
+    apk add --no-cache ca-certificates curl fontconfig ttf-dejavu && \
     cd /tmp && \
     curl -L http://download.java.net/media/jai/builds/release/1_1_3/jai-1_1_3-lib-linux-amd64.tar.gz | tar xfz - && \
     curl -L http://download.java.net/media/jai-imageio/builds/release/1.1/jai_imageio-1_1-lib-linux-amd64.tar.gz  | tar xfz - && \
