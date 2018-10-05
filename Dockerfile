@@ -12,12 +12,12 @@ RUN \
     
 # Install Marlin
 RUN cd /usr/local/tomcat/lib && \
-    wget https://github.com/bourgesl/marlin-renderer/releases/download/v0_9_1/marlin-0.9.1-Unsafe.jar && \
-    wget https://github.com/bourgesl/marlin-renderer/releases/download/v0_9_1/marlin-0.9.1-Unsafe-sun-java2d.jar
+    wget https://github.com/bourgesl/marlin-renderer/releases/download/v0_9_3/marlin-0.9.3-Unsafe.jar && \
+    wget https://github.com/bourgesl/marlin-renderer/releases/download/v0_9_3/marlin-0.9.3-Unsafe-sun-java2d.jar
 
 # Install geoserver
-ARG GS_VERSION=2.13.0
-ENV GEOSERVER_DATA_DIR="/geoserver/data"
+ARG GS_VERSION=2.14.0
+ENV GEOSERVER_DATA_DIR="/geo_data"
 RUN \
     mkdir -p $CATALINA_HOME/webapps/geoserver && \
     curl -L http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip > /tmp/geoserver.zip && \
@@ -36,4 +36,4 @@ RUN \
     rm -rf $CATALINA_HOME/webapps/manager
     
 COPY context.xml ${TOMCAT_HOME}/conf/context.xml
-ENV CATALINA_OPTS "-server -Xms256m -Xmx768m -Djava.awt.headless=true -Xbootclasspath/a:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe.jar -Xbootclasspath/p:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe-sun-java2d.jar -Dsun.java2d.renderer=org.marlin.pisces.PiscesRenderingEngine"
+ENV CATALINA_OPTS "-server -Xms256m -Xmx512m -Djava.awt.headless=true -Xbootclasspath/a:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe.jar -Xbootclasspath/p:/usr/local/tomcat/lib/marlin-0.9.1-Unsafe-sun-java2d.jar -Dsun.java2d.renderer=org.marlin.pisces.PiscesRenderingEngine"
