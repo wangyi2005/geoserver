@@ -21,8 +21,11 @@ ENV GEOSERVER_DATA_DIR="/geo_data"
 RUN \
     mkdir -p $CATALINA_HOME/webapps/geoserver && \
     curl -L http://downloads.sourceforge.net/project/geoserver/GeoServer/${GS_VERSION}/geoserver-${GS_VERSION}-war.zip > /tmp/geoserver.zip && \
+    curl -L http://sourceforge.net/projects/geoserver/files/GeoServer/${GS_VERSION}/extensions/geoserver-${GS_VERSION}-pyramid-plugin.zip > /tmp/pyramid.zip &&\
     unzip /tmp/geoserver.zip -d /tmp && \
+    unzip /tmp/pyramid.zip -d /tmp && \
     unzip /tmp/geoserver.war -d $CATALINA_HOME/webapps/geoserver && \
+    mv /tmp/*pyramid*.jar $CATALINA_HOME/webapps/geoserver/WEB-INF/lib && \
     chgrp -R 0 $CATALINA_HOME && \
     chmod -R g+rwX $CATALINA_HOME && \
     cd $CATALINA_HOME/webapps/geoserver/WEB-INF/lib  && \
