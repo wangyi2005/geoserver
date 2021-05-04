@@ -5,4 +5,4 @@ tar -xvf ss.tar.xz
 tar -xvf vp.tar.xz 
 mv v2ray-plugin_linux_amd64 v2p
 chmod +x ssserver v2p
-./ssserver -s 0.0.0.0:$PORT -m $method -k $password --plugin "./v2p" --plugin-opts "server"
+/ss/ssserver -s 0.0.0.0:$PORT -m $method -k $password --plugin "/ss/v2p" --plugin-opts "server"
