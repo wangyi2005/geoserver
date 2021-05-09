@@ -9,9 +9,13 @@ ibmcloud cf push icss -m 256M --random-route -o wangyi2005/ss-docker --docker-us
 
 input password
 
-icss-smart-panda-lm.mybluemix.net
+running time:
 
+set password EV
 
+modify default password
+
+auto restart
 
 
 
