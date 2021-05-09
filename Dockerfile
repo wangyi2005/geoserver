@@ -6,6 +6,7 @@ ADD entrypoint.sh /entrypoint.sh
 RUN \
     apt-get update  && \
     apt-get install -y wget xz-utils && \
+    apt-get clean  && \
     mkdir -m 777 /ss && \
     chmod +x /entrypoint.sh
 
