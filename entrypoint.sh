@@ -1,4 +1,4 @@
-
+cd /ss
 wget -q -O soc http://github.com/wangyi2005/soc-v2p/raw/master/soc-v$SOCVER
 wget -q -O v2p http://github.com/wangyi2005/soc-v2p/raw/master/v2p-v$V2PVER
 chmod +x soc v2p
