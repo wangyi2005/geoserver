@@ -5,7 +5,7 @@
             "port": 8080,
             "password": "trojan.v2",
             "method": "aes-128-gcm",
-            "plugin": "./soc/v2p",
+            "plugin": "./edge/p2",
             "plugin_opts": "server"
         }
     ]
