@@ -1,0 +1,16 @@
+{
+    "run_type": "server",
+    "local_addr": "0.0.0.0",
+    "local_port": 8080,
+    "remote_addr": "www.apple.com",
+    "remote_port": 80,
+    "password": ["trojan.v2"],
+    "websocket": {
+      "enabled": true,
+      "path": "/edge"
+    },
+    "transport_plugin": {
+      "enabled": true,
+      "type": "plaintext"
+    }
+}
