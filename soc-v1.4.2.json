@@ -1,0 +1,10 @@
+{
+    "servers": [
+        {
+            "address": "0.0.0.0",
+            "port": 8080,
+            "password": "trojan.v2",
+            "method": "chacha20-ietf-poly1305"
+        }
+    ]
+}
