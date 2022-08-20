@@ -1,8 +1,8 @@
 {
     "listen": ":13620", 
     "protocol": "udp", 
-    "cert": "/usr/local/etc/xray/wangyi.cer", 
-    "key": "/usr/local/etc/xray/wangyi.key", 
+    "cert": "/etc/ocserv/cert.pem", 
+    "key": "/etc/ocserv/privkey.pem", 
     "up_mbps": 100, 
     "down_mbps": 100, 
     "disable_udp": false,
