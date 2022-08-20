@@ -1,0 +1,14 @@
+{
+    "listen": ":13620", 
+    "protocol": "udp", 
+    "cert": "/usr/local/etc/xray/wangyi.cer", 
+    "key": "/usr/local/etc/xray/wangyi.key", 
+    "up_mbps": 100, 
+    "down_mbps": 100, 
+    "disable_udp": false,
+    "recv_window_conn": 15728640, 
+    "recv_window_client": 67108864, 
+    "max_conn_client": 4096, 
+    "disable_mtu_discovery": false, 
+    "resolver": "udp://8.8.8.8:53"
+  }

@@ -1,0 +1,19 @@
+[Unit]
+Description=Hysteria
+Documentation=https://github.com/HyNetwork/hysteria/wiki
+After=network.target
+
+[Service]
+User=hysteria
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_NET_RAW
+AmbientCapabilities=CAP_NET_BIND_SERVICE CAP_NET_RAW
+NoNewPrivileges=true
+WorkingDirectory=/etc/hysteria
+Environment=HYSTERIA_LOG_LEVEL=info
+ExecStart=/usr/local/bin/hysteria -c /etc/hysteria/%i.json server
+Restart=on-failure
+RestartPreventExitStatus=1
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
