@@ -1,14 +1,15 @@
 {
     "listen": ":13620", 
     "protocol": "udp", 
-    "cert": "/etc/ocserv/cert.pem", 
-    "key": "/etc/ocserv/privkey.pem", 
+    "cert": "/etc/hysteria/wangyi.cer", 
+    "key": " /etc/hysteria/wangyi.key", 
     "up_mbps": 100, 
     "down_mbps": 100, 
     "disable_udp": false,
     "recv_window_conn": 15728640, 
     "recv_window_client": 67108864, 
     "max_conn_client": 4096, 
+    "resolve_preference": "4",
     "disable_mtu_discovery": false, 
     "resolver": "udp://8.8.8.8:53"
   }
