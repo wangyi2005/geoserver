@@ -2,7 +2,7 @@
     "listen": ":13620", 
     "protocol": "udp", 
     "cert": "/etc/hysteria/wangyi.cer", 
-    "key": " /etc/hysteria/wangyi.key", 
+    "key": "/etc/hysteria/wangyi.key", 
     "up_mbps": 100, 
     "down_mbps": 100, 
     "disable_udp": false,
