@@ -1,9 +1,9 @@
 log-level: silent
 ipv6: false
-mode: direct
+mode: rule
 tuic-server:
   enable: true
-  listen: 0.0.0.0:10443
+  listen: 0.0.0.0:50250
   token:
     - wangyi2022
   certificate: /root/wangyi.cer
@@ -13,4 +13,6 @@ tuic-server:
   authentication-timeout: 1000
   alpn:
     - h3
-  max-udp-relay-packet-size: 1480
+  max-udp-relay-packet-size: 9000
+rules:
+  - MATCH,DIRECT
