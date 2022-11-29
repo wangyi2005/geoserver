@@ -1,0 +1,16 @@
+log-level: silent
+ipv6: false
+mode: direct
+tuic-server:
+  enable: true
+  listen: 0.0.0.0:10443
+  token:
+    - wangyi2022
+  certificate: /root/wangyi.cer
+  private-key: /root/wangyi.key
+  congestion-controller: bbr
+  max-idle-time: 15000
+  authentication-timeout: 1000
+  alpn:
+    - h3
+  max-udp-relay-packet-size: 1480
